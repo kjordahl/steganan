@@ -17,6 +17,48 @@ hidden data back!
 Want to add compression and/or encryption of your data? That is
 certainly possible, but is left as an exercise for the user.
 
+## Examples
+
+### Storing image data in an array of NaN values
+
+```
+>>> import matplotlib.pyplot as plt
+>>> from skimage.data import astronaut
+>>> import numpy as np
+>>> from steganan import steganan
+>>> img = astronaut()
+>>> print(img.shape)
+(512, 512, 3)
+>>> a = steganan.encode_array(img, stack=True, dtype=np.float64)
+>>> print(a)
+[[nan nan nan ... nan nan nan]
+ [nan nan nan ... nan nan nan]
+ [nan nan nan ... nan nan nan]
+ ...
+ [nan nan nan ... nan nan nan]
+ [nan nan nan ... nan nan nan]
+ [nan nan nan ... nan nan nan]]
+>>> decoded = steganan.decode_array(a, stack=True, depth=3)
+>>> plt.figure(figsize=(4, 4))
+>>> plt.imshow(decoded)
+```
+![decoded.png](https://github.com/kjordahl/steganan/raw/refs/heads/main/data/decoded.png)
+
+### Hiding data in an existing floating point array
+
+```
+>>> import rasterio as rio
+>>> src = rio.open("data/modis_aod_06_2025.tif")
+>>> a = src.read(1)
+>>> steganan.write_str_to_nans(a, "I have a secret!")
+>>> plt.imshow(a)
+```
+![encoded.png](https://github.com/kjordahl/steganan/raw/refs/heads/main/data/encoded.png)
+
+### Notebook example
+
+See [lightning talk slides](https://github.com/kjordahl/steganan/blob/main/slides/talk.ipynb).
+
 ---
 
 Repository initiated with [fpgmaas/cookiecutter-uv](https://github.com/fpgmaas/cookiecutter-uv).
