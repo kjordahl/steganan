@@ -54,6 +54,11 @@ certainly possible, but is left as an exercise for the user.
 >>> plt.imshow(a)
 ```
 ![encoded.png](https://github.com/kjordahl/steganan/raw/refs/heads/main/data/encoded.png)
+```
+>>> message = steganan.retrieve_string_from_payloads(a)
+>>> print(message)
+I have a secret!
+```
 
 ### Notebook example
 
