@@ -97,12 +97,12 @@ def write_str_to_nans(a, s):
 
 def retrieve_string_from_payloads(a):
     """Extract a string from encoded NaN payload values in input array"""
-    p = find_payloads(a)
+    p = a[is_payload_nan(a)]
     b = decode_array(p).astype(np.uint32)
     return uint32_array_to_str(b)
 
 
-def find_payloads(a):
+def is_payload_nan(a):
     """Find NaN values that contain paylads in an array"""
     if a.dtype == np.float32:
         dtype = np.uint32
@@ -110,9 +110,11 @@ def find_payloads(a):
     elif a.dtype == np.float64:
         dtype = np.uint64
         nan_mask = NAN_MASK_64
+    else:
+        raise TypeError("Only float32 and float64 data types are currently supported")
     nan_idx = np.isnan(a)
     nan_mask_idx = (a.view(dtype) ^ nan_mask) == 0
-    return a[nan_idx & ~nan_mask_idx]
+    return nan_idx & ~nan_mask_idx
 
 
 def save(a, filename):

@@ -84,7 +84,7 @@ def test_write_str_to_nans():
     steganan.write_str_to_nans(a, test_string)
     assert np.isnan(a).sum() == n_nans
     # retrieve the stored string
-    p = steganan.find_payloads(a)
+    p = a[steganan.is_payload_nan(a)]
     assert len(p) == len(test_string)
     b = steganan.decode_array(p).astype(np.uint32)
     res_string = steganan.uint32_array_to_str(b)
@@ -109,10 +109,34 @@ def test_write_str_to_nans_32():
     steganan.write_str_to_nans(a, test_string)
     assert np.isnan(a).sum() == n_nans
     # retrieve the stored string
-    p = steganan.find_payloads(a)
+    p = a[steganan.is_payload_nan(a)]
     assert len(p) == len(test_string)
     b = steganan.decode_array(p).astype(np.uint32)
     res_string = steganan.uint32_array_to_str(b)
     assert test_string == res_string
     new_res_string = steganan.retrieve_string_from_payloads(a)
     assert test_string == new_res_string
+
+
+def test_is_payload_nan():
+    test_array = np.random.random([10, 10])
+    assert_array_equal(steganan.is_payload_nan(test_array), 0)
+    test_array[:5, :5] = np.nan
+    assert_array_equal(steganan.is_payload_nan(test_array), 0)
+    val_arr = np.random.randint(10000, size=(5, 5), dtype=np.uint64)
+    test_array[5:, 5:] = steganan.encode_array(val_arr)
+    expected = np.zeros(test_array.shape, dtype=bool)
+    expected[5:, 5:] = True
+    assert_array_equal(steganan.is_payload_nan(test_array), expected)
+
+
+def test_is_payload_nan_32():
+    test_array = np.random.random([10, 10]).astype(np.float32)
+    assert_array_equal(steganan.is_payload_nan(test_array), 0)
+    test_array[:5, :5] = np.nan
+    assert_array_equal(steganan.is_payload_nan(test_array), 0)
+    val_arr = np.random.randint(10000, size=(5, 5), dtype=np.uint32)
+    test_array[5:, 5:] = steganan.encode_array(val_arr, dtype=np.float32)
+    expected = np.zeros(test_array.shape, dtype=bool)
+    expected[5:, 5:] = True
+    assert_array_equal(steganan.is_payload_nan(test_array), expected)
