@@ -51,7 +51,7 @@ certainly possible, but is left as an exercise for the user.
 >>> src = rio.open("data/modis_aod_06_2025.tif")
 >>> a = src.read(1)
 >>> steganan.write_str_to_nans(a, "I have a secret!")
->>> plt.imshow(a)
+>>> plt.imshow(a, cmap='inferno_r', vmin=0, vmax=1.0)
 ```
 ![encoded.png](https://github.com/kjordahl/steganan/raw/refs/heads/main/data/encoded.png)
 ```
