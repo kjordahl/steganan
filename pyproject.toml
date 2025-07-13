@@ -1,13 +1,15 @@
 [project]
 name = "steganan"
-version = "0.1.0"
+version = "0.2.0"
 description = "Steganography in floating point data with NaN payloads"
 authors = [{ name = "Kelsey Jordahl", email = "kjordahl@alum.mit.edu" }]
 readme = "README.md"
 keywords = ['python']
-requires-python = ">=3.9,<4.0"
+requires-python = ">=3.9"
 classifiers = [
+    "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.9",
