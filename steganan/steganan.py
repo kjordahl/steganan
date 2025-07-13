@@ -117,18 +117,6 @@ def is_payload_nan(a):
     return nan_idx & ~nan_mask_idx
 
 
-def save(a, filename):
-    from imageio.v3 import imwrite
-
-    imwrite(filename, encode_array(a), compression="deflate")
-
-
-def load(filename):
-    from imageio.v3 import imread
-
-    return decode_array(imread(filename))
-
-
 if __name__ == "__main__":
     test_arr = np.random.randint(1000, size=(4, 4), dtype=np.uint64)
     print("input:\n", test_arr)
