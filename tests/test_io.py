@@ -1,5 +1,5 @@
-from imageio.v3 import imwrite
 import numpy as np
+from imageio.v3 import imwrite
 from numpy.testing import assert_array_equal
 
 from steganan import io, steganan
