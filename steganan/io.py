@@ -3,7 +3,7 @@ from imageio.v3 import imread, imwrite
 from steganan import steganan
 
 
-def save_as_nan(a, filename, plugin='tifffile'):
+def save_as_nan(a, filename, plugin="tifffile"):
     """Save an array as an encoded TIFF file of NaNs."""
     imwrite(filename, steganan.encode_array(a), plugin=plugin, compression="deflate")
 
