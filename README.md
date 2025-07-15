@@ -1,9 +1,9 @@
 # steganan
 
 [![PyPI - Version](https://img.shields.io/pypi/v/steganan)](https://pypi.org/project/steganan/)
-[![Release](https://img.shields.io/github/v/release/kjordahl/steganan)](https://img.shields.io/github/v/release/kjordahl/steganan)
+[![Release](https://img.shields.io/github/v/release/kjordahl/steganan)](https://github.com/kjordahl/steganan/releases)
 [![Build status](https://img.shields.io/github/actions/workflow/status/kjordahl/steganan/main.yml?branch=main)](https://github.com/kjordahl/steganan/actions/workflows/main.yml?query=branch%3Amain)
-[![License](https://img.shields.io/github/license/kjordahl/steganan)](https://img.shields.io/github/license/kjordahl/steganan)
+[![License](https://img.shields.io/github/license/kjordahl/steganan)](https://github.com/kjordahl/steganan/blob/main/LICENSE)
 
 Steganography in floating point data with NaN payloads
 
