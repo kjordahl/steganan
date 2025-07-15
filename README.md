@@ -25,9 +25,9 @@ certainly possible, but is left as an exercise for the user.
 
 ```
 >>> import matplotlib.pyplot as plt
->>> from skimage.data import astronaut
 >>> import numpy as np
->>> from steganan import steganan
+>>> from skimage.data import astronaut
+>>> import steganan
 >>> img = astronaut()
 >>> print(img.shape)
 (512, 512, 3)
