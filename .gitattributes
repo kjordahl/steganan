@@ -1,0 +1,2 @@
+# Ignore Jupyter notebook files for language statistics
+*.ipynb linguist-generated=true
