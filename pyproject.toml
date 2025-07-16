@@ -1,6 +1,6 @@
 [project]
 name = "steganan"
-version = "0.2.0"
+dynamic = ["version"]
 description = "Steganography in floating point data with NaN payloads"
 authors = [{ name = "Kelsey Jordahl", email = "kjordahl@alum.mit.edu" }]
 readme = "README.md"
@@ -45,11 +45,19 @@ dev = [
 ]
 
 [build-system]
-requires = ["hatchling"]
+requires = ["hatchling", "uv-dynamic-versioning"]
 build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
 packages = ["steganan"]
+
+[tool.uv-dynamic-versioning]
+vcs = "git"
+style = "pep440"
+bump = true
+
+[tool.hatch.version]
+source = "uv-dynamic-versioning"
 
 [tool.mypy]
 files = ["steganan"]
