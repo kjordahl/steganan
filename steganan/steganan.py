@@ -4,6 +4,7 @@ Encode integer array values in unused bits of floating point NaN values
 """
 
 import numpy as np
+from numpy.typing import DTypeLike, NDArray
 
 MAX_VAL_FLOAT32 = 2**22 - 1
 MAX_VAL_FLOAT64 = 2**51 - 1
@@ -12,12 +13,12 @@ NAN_MASK_32 = np.float32(np.nan).view(np.uint32)
 NAN_MASK_64 = np.float64(np.nan).view(np.uint64)
 
 
-def encode_array(a, stack=False, dtype=np.float64):
+def encode_array(a: NDArray, stack: bool = False, dtype: DTypeLike = np.float64) -> NDArray:
     """Encode an numpy array into the payload of NaN values"""
     dtype = np.dtype(dtype)
     if dtype == np.float32:
         max_val = MAX_VAL_FLOAT32
-        nan_mask = NAN_MASK_32
+        nan_mask: DTypeLike = NAN_MASK_32
     elif dtype == np.float64:
         max_val = MAX_VAL_FLOAT64
         nan_mask = NAN_MASK_64
@@ -36,11 +37,11 @@ def encode_array(a, stack=False, dtype=np.float64):
     return (a | nan_mask).view(dtype)
 
 
-def decode_array(a, stack=False, depth=None):
+def decode_array(a: NDArray, stack: bool = False, depth: int = 3) -> NDArray:
     """Decode payload of NaN values into an output array"""
     if a.dtype == np.float32:
-        i_dtype = np.uint32
-        nan_mask = NAN_MASK_32
+        i_dtype: DTypeLike = np.uint32
+        nan_mask: DTypeLike = NAN_MASK_32
     else:
         i_dtype = np.uint64
         nan_mask = NAN_MASK_64
@@ -58,18 +59,18 @@ def decode_array(a, stack=False, depth=None):
         return decoded
 
 
-def str_to_bytes_array(s):
+def str_to_bytes_array(s: str) -> NDArray[np.bytes_]:
     """Convert a string to a numpy bytes_ array, one character per element"""
-    return np.bytes_([_.encode() for _ in list(s)])
+    return np.array([_.encode() for _ in list(s)]).astype(np.bytes_)
 
 
-def str_to_uint32_array(s):
+def str_to_uint32_array(s: str) -> NDArray[np.uint32]:
     """Convert a string to a numpy uint32 array, one character per element"""
     b = str_to_bytes_array(s)
-    return np.uint32([int.from_bytes(_, byteorder="little") for _ in b])
+    return np.array([int.from_bytes(_, byteorder="little") for _ in b]).astype(np.uint32)
 
 
-def uint32_array_to_str(a):
+def uint32_array_to_str(a: NDArray[np.uint32]) -> str:
     """Convert a numpy uint32 array representing characters to a Python string"""
     if a.dtype != np.uint32:
         raise TypeError("Expected a uint32 array")
@@ -77,7 +78,7 @@ def uint32_array_to_str(a):
     return "".join(c)
 
 
-def write_str_to_nans(a, s):
+def write_str_to_nans(a: NDArray, s: str) -> None:
     """Write characters from a string into NaN payloads in the input array.
     There must be sufficient NaN values already existing in a.
     Locations will be chosen at random.
@@ -95,18 +96,18 @@ def write_str_to_nans(a, s):
     a[i_vals, j_vals] = encode_array(b, dtype=a.dtype)
 
 
-def retrieve_string_from_payloads(a):
+def retrieve_string_from_payloads(a: NDArray) -> str:
     """Extract a string from encoded NaN payload values in input array"""
     p = a[is_payload_nan(a)]
     b = decode_array(p).astype(np.uint32)
     return uint32_array_to_str(b)
 
 
-def is_payload_nan(a):
+def is_payload_nan(a: NDArray) -> NDArray:
     """Find NaN values that contain paylads in an array"""
     if a.dtype == np.float32:
-        dtype = np.uint32
-        nan_mask = NAN_MASK_32
+        dtype: DTypeLike = np.uint32
+        nan_mask: DTypeLike = NAN_MASK_32
     elif a.dtype == np.float64:
         dtype = np.uint64
         nan_mask = NAN_MASK_64
@@ -114,7 +115,8 @@ def is_payload_nan(a):
         raise TypeError("Only float32 and float64 data types are currently supported")
     nan_idx = np.isnan(a)
     nan_mask_idx = (a.view(dtype) ^ nan_mask) == 0
-    return nan_idx & ~nan_mask_idx
+    idx: NDArray[np.bool] = nan_idx & ~nan_mask_idx
+    return idx
 
 
 if __name__ == "__main__":
