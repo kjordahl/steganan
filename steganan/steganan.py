@@ -34,6 +34,9 @@ def encode_array(a: NDArray, stack: bool = False, dtype: DTypeLike = np.float64)
         if a.shape[-1] != 3:
             raise NotImplementedError("Only arrays with depth 3 are currently supported")
         a = a[..., 0].astype(np.uint32) * 256**2 + a[..., 1].astype(np.uint32) * 256 + a[..., 2]
+    else:
+        if dtype == np.float32 and np.iinfo(a.dtype).bits > 32:
+            a = a.astype(np.uint32)
     return (a | nan_mask).view(dtype)
 
 
