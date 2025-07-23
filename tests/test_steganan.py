@@ -6,10 +6,12 @@ import steganan
 
 
 def test_encode_roundtrip():
-    test_arr = np.random.randint(2**51, size=(128, 128), dtype=np.uint64)
-    secret = steganan.encode_array(test_arr)
-    assert np.all(np.isnan(secret))
-    assert_array_equal(test_arr, steganan.decode_array(secret))
+    for dtype in [np.uint8, np.uint16, np.uint32, np.uint64]:
+        max_val = min(2**51, np.iinfo(dtype).max)
+        test_arr = np.random.randint(max_val, size=(128, 128), dtype=np.uint64)
+        secret = steganan.encode_array(test_arr)
+        assert np.all(np.isnan(secret))
+        assert_array_equal(test_arr, steganan.decode_array(secret))
 
 
 def test_encode_toobig():
@@ -22,13 +24,15 @@ def test_encode_toobig():
 
 
 def test_encode_roundtrip32():
-    test_arr = np.random.randint(2**22, size=(128, 128), dtype=np.uint32)
-    secret = steganan.encode_array(test_arr, dtype=np.float32)
-    assert secret.dtype == np.float32
-    assert np.all(np.isnan(secret))
-    output_arr = steganan.decode_array(secret)
-    assert output_arr.dtype == np.uint32
-    assert_array_equal(test_arr, output_arr)
+    for dtype in [np.uint8, np.uint16, np.uint32, np.uint64]:
+        max_val = min(2**22, np.iinfo(dtype).max)
+        test_arr = np.random.randint(max_val, size=(128, 128), dtype=dtype)
+        secret = steganan.encode_array(test_arr, dtype=np.float32)
+        assert secret.dtype == np.float32
+        assert np.all(np.isnan(secret))
+        output_arr = steganan.decode_array(secret)
+        assert output_arr.dtype == np.uint32
+        assert_array_equal(test_arr, output_arr)
 
 
 def test_encode_stacked_roundtrip():
