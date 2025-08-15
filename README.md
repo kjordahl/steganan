@@ -7,6 +7,7 @@
 
 Steganography in floating point data with NaN payloads
 
+- **Codeberg repository**: <https://codeberg.org/kjordahl/steganan>
 - **Github repository**: <https://github.com/kjordahl/steganan/>
 
 Do you have not-a-number values in your floating point data that
