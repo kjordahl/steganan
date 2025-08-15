@@ -45,7 +45,7 @@ certainly possible, but is left as an exercise for the user.
 >>> plt.figure(figsize=(4, 4))
 >>> plt.imshow(decoded)
 ```
-![decoded.png](https://github.com/kjordahl/steganan/raw/refs/heads/main/data/decoded.png)
+![decoded.png](data/decoded.png)
 
 ### Hiding data in an existing floating point array
 
@@ -56,7 +56,7 @@ certainly possible, but is left as an exercise for the user.
 >>> steganan.write_str_to_nans(a, "I have a secret!")
 >>> plt.imshow(a, cmap='inferno_r', vmin=0, vmax=1.0)
 ```
-![encoded.png](https://github.com/kjordahl/steganan/raw/refs/heads/main/data/encoded.png)
+![encoded.png](data/encoded.png)
 ```
 >>> message = steganan.retrieve_string_from_payloads(a)
 >>> print(message)
@@ -65,7 +65,7 @@ I have a secret!
 
 ### Notebook example
 
-See [lightning talk slides](https://github.com/kjordahl/steganan/blob/main/slides/talk.ipynb).
+See [lightning talk slides](slides/talk.ipynb).
 
 ---
 
